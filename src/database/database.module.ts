@@ -3,14 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getOrmConfig } from './orm.config';
 
 const dbDynamicModule = [
-	TypeOrmModule.forRootAsync({
-		useFactory() {
-			return getOrmConfig(process.env);
-		}
-	})
-]
+  TypeOrmModule.forRootAsync({
+    useFactory() {
+      return getOrmConfig(process.env);
+    },
+  }),
+];
 
 @Module({
-	imports: [...dbDynamicModule],
+  imports: [...dbDynamicModule],
 })
 export class DatabaseModule {}

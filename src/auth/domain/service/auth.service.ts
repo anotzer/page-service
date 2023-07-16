@@ -8,65 +8,65 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-	constructor(
-		private readonly authRepository: AuthRepository,
-		private readonly jwtService: JwtService,
-	) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
-	async createUser(dto: AuthDto) {
-		const salt = genSaltSync(GEN_SALT_ROUNDS);
-		const newUser = new User({
-			email: dto.email,
-			passwordHash: hashSync(dto.password, salt),
-		});
+  async createUser(dto: AuthDto) {
+    const salt = genSaltSync(GEN_SALT_ROUNDS);
+    const newUser = new User({
+      email: dto.email,
+      passwordHash: hashSync(dto.password, salt),
+    });
 
-		return this.authRepository.createUser(new User(newUser));
-	}
+    return this.authRepository.createUser(new User(newUser));
+  }
 
-	async loginUser(dto: AuthDto) {
-		const email = dto.email;
-		const password = dto.password;
+  async loginUser(dto: AuthDto) {
+    const email = dto.email;
+    const password = dto.password;
 
-		const { email: validatedUserEmail } = await this.validateUser(email, password);
+    const { email: validatedUserEmail } = await this.validateUser(email, password);
 
-		const token = await this.getAccessToken(validatedUserEmail);
+    const token = await this.getAccessToken(validatedUserEmail);
 
-		await this.authRepository.saveAccessToken({
-			access_token: token.access_token,
-			refresh_token: '',
-			email: validatedUserEmail,
-		});
+    await this.authRepository.saveAccessToken({
+      access_token: token.access_token,
+      refresh_token: '',
+      email: validatedUserEmail,
+    });
 
-		return token;
-	}
-	ldf[eznt,tfytgfhjkm
-	async findUser(email: string): Promise<User> {
-		return this.authRepository.findUser(email);
-	}
+    return token;
+  }
 
-	private async validateUser(email: string, password: string): Promise<Pick<User, 'email'>> {
-		const user = await this.findUser(email);
+  async findUser(email: string): Promise<User> {
+    return this.authRepository.findUser(email);
+  }
 
-		if (!user) {
-			throw new UnauthorizedException(USER_NOT_FOUND);
-		}
+  private async validateUser(email: string, password: string): Promise<Pick<User, 'email'>> {
+    const user = await this.findUser(email);
 
-		const isCorrectPassword = await compare(password, user.passwordHash);
+    if (!user) {
+      throw new UnauthorizedException(USER_NOT_FOUND);
+    }
 
-		if (!isCorrectPassword) {
-			throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
-		}
+    const isCorrectPassword = await compare(password, user.passwordHash);
 
-		return {
-			email: user.email,
-		};
-	}
+    if (!isCorrectPassword) {
+      throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
+    }
 
-	private async getAccessToken(email: string) {
-		const payload = { email };
+    return {
+      email: user.email,
+    };
+  }
 
-		return {
-			access_token: await this.jwtService.signAsync(payload),
-		};
-	}
+  private async getAccessToken(email: string) {
+    const payload = { email };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+  }
 }

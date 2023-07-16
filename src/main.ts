@@ -13,7 +13,7 @@ async function bootstrap() {
   const router = server._events.request._router;
 
   const availableRoutes: [] = router.stack
-    .map(layer => {
+    .map((layer) => {
       if (layer.route) {
         return {
           route: {
@@ -23,7 +23,7 @@ async function bootstrap() {
         };
       }
     })
-    .filter(item => item !== undefined);
+    .filter((item) => item !== undefined);
   console.log(availableRoutes);
 }
 bootstrap();

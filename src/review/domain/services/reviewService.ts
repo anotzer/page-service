@@ -6,29 +6,29 @@ import { BaseSuccessDto } from '@app/review/dto/shared/base-success.dto';
 
 @Injectable()
 export class ReviewService {
-	constructor(private readonly reviewRepository: ReviewRepository) {}
+  constructor(private readonly reviewRepository: ReviewRepository) {}
 
-	async getById(id: string) {
-		return this.reviewRepository.getById(id);
-	}
+  async getById(id: string) {
+    return this.reviewRepository.getById(id);
+  }
 
-	async createReview(reviewRequest: CreateReviewDto): Promise<ResourceReviewDto> {
-		return this.reviewRepository.save(new Review(reviewRequest));
-	}
+  async createReview(reviewRequest: CreateReviewDto): Promise<ResourceReviewDto> {
+    return this.reviewRepository.save(new Review(reviewRequest));
+  }
 
-	async updateReview(id: string, reviewRequest: UpdateReviewDto): Promise<BaseSuccessDto> {
-		return this.reviewRepository.update(id, new Review(reviewRequest)).then((res) => {
-			return {
-				success: Boolean(res.affected),
-			};
-		});
-	}
+  async updateReview(id: string, reviewRequest: UpdateReviewDto): Promise<BaseSuccessDto> {
+    return this.reviewRepository.update(id, new Review(reviewRequest)).then((res) => {
+      return {
+        success: Boolean(res.affected),
+      };
+    });
+  }
 
-	async deleteReview(id: string): Promise<BaseSuccessDto> {
-		return this.reviewRepository.delete(id).then((res) => {
-			return {
-				success: Boolean(res.affected),
-			};
-		});
-	}
+  async deleteReview(id: string): Promise<BaseSuccessDto> {
+    return this.reviewRepository.delete(id).then((res) => {
+      return {
+        success: Boolean(res.affected),
+      };
+    });
+  }
 }

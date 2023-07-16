@@ -5,17 +5,17 @@ import { APP_PIPE } from '@nestjs/core';
 import { AuthModule } from '@app/auth/auth.module';
 
 @Module({
-	imports: [DatabaseModule, ReviewModule, AuthModule],
-	controllers: [],
-	providers: [
-		{
-			provide: APP_PIPE,
-			useValue: new ValidationPipe({
-				transform: true,
-				forbidUnknownValues: false,
-				// whitelist: true,
-			}),
-		},
-	],
+  imports: [DatabaseModule, ReviewModule, AuthModule],
+  controllers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        transform: true,
+        forbidUnknownValues: false,
+        // whitelist: true,
+      }),
+    },
+  ],
 })
 export class AppModule {}

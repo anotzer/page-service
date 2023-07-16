@@ -7,7 +7,7 @@ const services = [ReviewService];
 const repositories = [ReviewRepository];
 
 @Module({
-	controllers: [ReviewController],
-	providers: [...services, ...repositories],
+  controllers: [ReviewController],
+  providers: [...services, ...repositories],
 })
 export class ReviewModule {}
