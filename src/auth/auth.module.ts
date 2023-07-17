@@ -2,20 +2,18 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './controller/auth.controller';
 import { AuthService } from '@app/auth/domain/service/auth.service';
 import { AuthRepository } from '@app/auth/domain/repository/auth.repository';
-import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from '@app/auth/strategies/jwt-strategy';
 
 const services = [AuthService];
 const repositories = [AuthRepository];
-
-const getJWTConfig = async (configService: ConfigService): Promise<JwtModuleOptions> => {
-  return {
-    secret: configService.get('JWT_SECRET'),
-  };
-};
+const extraModules = [JwtStrategy];
 
 @Module({
   imports: [
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -25,8 +23,9 @@ const getJWTConfig = async (configService: ConfigService): Promise<JwtModuleOpti
         };
       },
     }),
+    PassportModule,
   ],
   controllers: [AuthController],
-  providers: [...services, ...repositories],
+  providers: [...services, ...repositories, ...extraModules],
 })
 export class AuthModule {}
