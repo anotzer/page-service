@@ -19,7 +19,8 @@ export const getOrmConfig = (env: any): PostgresConnectionOptions => {
     schema: '',
     //TODO: learn entities directory
     //TODO: Entity was not found
-    entities: [resolve(projectDir, 'dist', '**', '*.entity.{js,ts}')],
+    entities: [__dirname + '/../**/*.entity.{js,ts}'],
+    // entities: [resolve(projectDir, '**', '*.entity.{js,ts}')],
     namingStrategy: new SnakeNamingStrategy(),
     synchronize: true,
   };
