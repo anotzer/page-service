@@ -14,16 +14,14 @@ export class ReviewController {
   }
 
   @Post('/create')
-  async createReview(
-    @Body(new CreateReviewPipe()) request: CreateReviewDto,
-  ): Promise<ResourceReviewDto> {
+  async createReview(@Body() request: CreateReviewDto): Promise<ResourceReviewDto> {
     return this.reviewService.createReview(request);
   }
 
   @Put(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body(new CreateReviewPipe()) request: UpdateReviewDto,
+    @Body() request: UpdateReviewDto,
   ): Promise<BaseSuccessDto> {
     return this.reviewService.updateReview(id, request);
   }
