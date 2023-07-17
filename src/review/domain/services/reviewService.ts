@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReviewRepository } from '@app/review/domain/repositories/reviewRepository';
 import { CreateReviewDto, ResourceReviewDto, UpdateReviewDto } from '@app/review/dto/review.dto';
 import { Review } from '@app/review/model/review.entity';
@@ -9,7 +9,13 @@ export class ReviewService {
   constructor(private readonly reviewRepository: ReviewRepository) {}
 
   async getById(id: string) {
-    return this.reviewRepository.getById(id);
+    const review = await this.reviewRepository.getById(id);
+
+    if (!review) {
+      throw new NotFoundException('review was not found');
+    }
+
+    return review;
   }
 
   async createReview(reviewRequest: CreateReviewDto): Promise<ResourceReviewDto> {
